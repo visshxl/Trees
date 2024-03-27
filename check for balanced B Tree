@@ -1,0 +1,21 @@
+question:-https://leetcode.com/problems/balanced-binary-tree/
+class Solution {
+public:
+    int recursiveSol(TreeNode* root){
+        if(root==NULL) return 0;
+
+        int lh=recursiveSol(root->left);
+        if(lh==-1) return -1;
+        int rh=recursiveSol(root->right);
+        if(rh==-1) return -1;
+        
+        if(abs(rh-lh)>1) return -1;
+        return 1+max(rh, lh);
+    }
+
+    bool isBalanced(TreeNode* root) {
+        int height=recursiveSol(root);
+        return (height!=-1);
+    }
+};
+// striver's Trees Playlist
