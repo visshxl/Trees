@@ -1,0 +1,48 @@
+question:-https://www.geeksforgeeks.org/problems/boundary-traversal-of-binary-tree/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=bottom_sticky_on_article
+class Solution {
+public:
+    void leafPreOrder(Node* root, vector<int>& leafs){
+        if(root==NULL) return;
+        if(root->left==NULL && root->right==NULL){
+            leafs.push_back(root->data);
+        }
+        leafPreOrder(root->left, leafs);
+        leafPreOrder(root->right, leafs);
+    }
+    vector <int> boundary(Node *root)
+    {
+        stack<int> rightBoundary;
+        vector<int> leftBoundary;
+        vector<int> leafs;
+        if(root->left!=NULL || root->right!=NULL) leftBoundary.push_back(root->data);
+        leafPreOrder(root, leafs);
+        
+        Node* left=root->left, *right=root->right;
+        while(left){
+            if(left->right==NULL && left->left==NULL) break;
+            leftBoundary.push_back(left->data);
+            if(left->left!=NULL){
+                left=left->left;
+            }else{
+                left=left->right;
+            }
+        }
+        while(right){
+            if(right->right==NULL && right->left==NULL) break;
+            rightBoundary.push(right->data);
+            if(right->right!=NULL){
+                right=right->right;
+            }else{
+                right=right->left;
+            }
+        }
+        for(auto it:leafs){
+            leftBoundary.push_back(it);
+        }
+        while(!rightBoundary.empty()){
+            leftBoundary.push_back(rightBoundary.top());
+            rightBoundary.pop();
+        }
+        return leftBoundary;
+    }
+};
