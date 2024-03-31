@@ -1,0 +1,35 @@
+question:-https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/
+class Solution {
+public:
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        // creating the map that really important:-
+        map<int, map<int, multiset<int>>> nodes;// Col -> {row,{x,y,z...}};
+        // we are performing the level order traversal:-
+        queue<pair<TreeNode*, pair<int,int>>> todo;// Node , {row, col};
+        todo.push({root, {0,0}});
+        while(!todo.empty()){
+            auto p=todo.front();
+            todo.pop();
+            TreeNode* node=p.first;
+            int x=p.second.first, y=p.second.second;
+            nodes[x][y].insert(node->val);
+            if(node->left){
+                todo.push({node->left, {x-1, y+1}});
+            }
+            if(node->right){
+                todo.push({node->right, {x+1, y+1}});
+            }
+        }
+        vector<vector<int>> ans;
+        // now traversal:-
+        for(auto p:nodes){
+            vector<int> col;
+            for(auto q:p.second){
+                col.insert(col.end(), q.second.begin(), q.second.end());
+            }
+            ans.push_back(col);
+        }
+        return ans;
+    }
+};
+// striver's tree playlist
