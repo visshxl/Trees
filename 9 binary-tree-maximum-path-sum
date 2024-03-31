@@ -4,11 +4,11 @@ public:
     int recursiveSol(TreeNode* root, int& maxi){
         if(root==nullptr) return 0;
 
-        int leftsum=max(0, recursiveSol(root->left, maxi));
-        int rightsum=max(0, recursiveSol(root->right, maxi)); 
-        maxi=max(maxi,(leftsum+rightsum+root->val));
+        int leftsum=max(0, recursiveSol(root->left, maxi)); // its giving 0 in case of negative sum returned else returning the path on left side with highest sum
+        int rightsum=max(0, recursiveSol(root->right, maxi)); // its giving 0 in case of negative sum returned else returning the path on right side with highest sum
+        maxi=max(maxi,(leftsum+rightsum+root->val)); // maintaining a max for every time and calculating the umberella shape path for the answer and updating when found max
 
-        return root->val+max(rightsum, leftsum);
+        return root->val+max(rightsum, leftsum); ?// returning the path which is needed for the max sum 
     }
 
     int maxPathSum(TreeNode* root) {
@@ -18,3 +18,4 @@ public:
     }
 };
 // striver's tree playlist
+
