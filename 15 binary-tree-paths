@@ -1,0 +1,35 @@
+question:-https://leetcode.com/problems/binary-tree-paths/
+class Solution {
+public:
+    string convert(vector<int> temp){    
+        string ans="";
+        ans+=to_string(temp[0]);
+        for(int i=1; i<temp.size(); i++){
+            ans+=("->");
+            ans+=to_string(temp[i]);
+        }
+        return ans;
+    }
+    void recursivePre(TreeNode* root, vector<int>& temp, vector<string>& ans){
+        if(root==NULL) return;
+        if(root->left==NULL && root->right==NULL){
+            temp.push_back(root->val);
+            ans.push_back(convert(temp));
+            temp.pop_back();
+            return;
+        }
+        temp.push_back(root->val);
+        recursivePre(root->left, temp, ans);
+        recursivePre(root->right, temp, ans);
+
+        temp.pop_back();
+        return;
+    }
+
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<int> temp;
+        vector<string> ans;
+        recursivePre(root, temp, ans);
+        return ans;
+    }
+};
