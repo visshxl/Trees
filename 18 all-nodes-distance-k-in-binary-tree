@@ -1,9 +1,7 @@
 question:-https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/
 class Solution {
 public:
-    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        vector<int> ans;
-        map<TreeNode*, TreeNode*> parentsMap; //storing the parents of each node so we can travel back
+    void markParents(TreeNode* root, TreeNode* target, unordered_map<TreeNode*, TreeNode*>& parentsMap){
         queue<TreeNode*> q; // for BFS traversal to store parents in the map
         q.push(root);
         while(!q.empty()){
@@ -21,13 +19,19 @@ public:
                 }
             }
         }
+    }
 
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        vector<int> ans;
+        unordered_map<TreeNode*, TreeNode*> parentsMap; //storing parent of ech node so v can trvl back
+        markParents(root, target, parentsMap);
 
+        map<TreeNode*, bool> visited; // for storing record of each visited node
         queue<pair<TreeNode*, int>> que; // for BFS traversal and int for storing the distance
         que.push({target, 0});
-        map<TreeNode*, bool> visited; // for storing record of each visited node
-        while(!que.empty()){
-            for(int i=0; i<que.size(); i++){
+        while(!que.empty()){// will continue till it has reached a distance of k 
+            int size=que.size();
+            while(size--){
                 TreeNode* node=que.front().first;
                 int dis=que.front().second;
                 que.pop();
@@ -35,17 +39,15 @@ public:
                     ans.push_back(node->val);
                     continue;
                 }
+                visited[node]=1;// marking the node as visited
                 if(node->left && visited[node->left]!=1){
                     que.push({node->left, dis+1});
-                    visited[node]=1;
                 }
                 if(node->right && visited[node->right]!=1){
                     que.push({node->right, dis+1});
-                    visited[node]=1;
                 }
                 if(parentsMap.find(node)!=parentsMap.end() && visited[parentsMap[node]]!=1){
                     que.push({parentsMap[node], dis+1});
-                    visited[node]=1;
                 }
             }
         }
