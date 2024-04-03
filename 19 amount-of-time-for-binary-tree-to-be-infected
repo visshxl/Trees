@@ -1,0 +1,61 @@
+question:-https://leetcode.com/problems/amount-of-time-for-binary-tree-to-be-infected/
+class Solution {
+public:
+    void markParents(TreeNode* root, TreeNode* target, unordered_map<TreeNode*, TreeNode*>& parentsMap){
+        queue<TreeNode*> q; // for BFS traversal to store parents in the map
+        q.push(root);
+        while(!q.empty()){
+            for(int i=0; i<q.size(); i++){
+                TreeNode* node=q.front();
+                q.pop();
+                if(node==target) continue; // target se niche wali nodes k parents ki need he nhi h
+                if(node->left){
+                    q.push(node->left);
+                    parentsMap[node->left]=node;
+                }
+                if(node->right){
+                    q.push(node->right);
+                    parentsMap[node->right]=node;
+                }
+            }
+        }
+    }
+    TreeNode* findStart(TreeNode* root, int start){ // to find node of start point
+        if(!root || root->val==start) return root;
+        TreeNode* left=findStart(root->left, start);
+        TreeNode* right=findStart(root->right, start);
+        return (left==NULL) ? right:left;
+    }
+    int amountOfTime(TreeNode* root, int start) {
+        TreeNode* target=findStart(root, start);
+        unordered_map<TreeNode*, TreeNode*> parentsMap;
+        markParents(root, target, parentsMap);
+
+        map<TreeNode*, bool> visited; // for storing record of each visited node
+        queue<TreeNode*> que; // for BFS traversal and int for storing the distance
+        que.push(target);
+        int time=0;
+        while(!que.empty()){// will continue till it has reached a distance of k 
+            int size=que.size();
+            time++;
+            while(size--){
+                TreeNode* node=que.front();
+                que.pop();
+    
+                visited[node]=1;// marking the node as visited
+                if(node->left && visited[node->left]!=1){
+                    que.push(node->left);
+                }
+                if(node->right && visited[node->right]!=1){
+                    que.push(node->right);
+                }
+                if(parentsMap.find(node)!=parentsMap.end() && visited[parentsMap[node]]!=1){
+                    que.push(parentsMap[node]);
+                }
+            }
+        }
+        return time-1;
+    }
+};
+// same as the (863. All Nodes Distance K in Binary Tree)
+// striver's trees playlist
