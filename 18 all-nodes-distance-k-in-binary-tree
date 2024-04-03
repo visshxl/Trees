@@ -1,0 +1,56 @@
+question:-https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/
+class Solution {
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        vector<int> ans;
+        map<TreeNode*, TreeNode*> parentsMap; //storing the parents of each node so we can travel back
+        queue<TreeNode*> q; // for BFS traversal to store parents in the map
+        q.push(root);
+        while(!q.empty()){
+            for(int i=0; i<q.size(); i++){
+                TreeNode* node=q.front();
+                q.pop();
+                if(node==target) continue; // target se niche wali nodes k parents ki need he nhi h
+                if(node->left){
+                    q.push(node->left);
+                    parentsMap[node->left]=node;
+                }
+                if(node->right){
+                    q.push(node->right);
+                    parentsMap[node->right]=node;
+                }
+            }
+        }
+
+
+        queue<pair<TreeNode*, int>> que; // for BFS traversal and int for storing the distance
+        que.push({target, 0});
+        map<TreeNode*, bool> visited; // for storing record of each visited node
+        while(!que.empty()){
+            for(int i=0; i<que.size(); i++){
+                TreeNode* node=que.front().first;
+                int dis=que.front().second;
+                que.pop();
+                if(dis==k){
+                    ans.push_back(node->val);
+                    continue;
+                }
+                if(node->left && visited[node->left]!=1){
+                    que.push({node->left, dis+1});
+                    visited[node]=1;
+                }
+                if(node->right && visited[node->right]!=1){
+                    que.push({node->right, dis+1});
+                    visited[node]=1;
+                }
+                if(parentsMap.find(node)!=parentsMap.end() && visited[parentsMap[node]]!=1){
+                    que.push({parentsMap[node], dis+1});
+                    visited[node]=1;
+                }
+            }
+        }
+        return ans;
+    }
+};
+// approach from striver's tree playlist 
+// coded myself
