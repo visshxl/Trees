@@ -1,14 +1,18 @@
 question:-https://leetcode.com/problems/amount-of-time-for-binary-tree-to-be-infected/
 class Solution {
 public:
-    void markParents(TreeNode* root, TreeNode* target, unordered_map<TreeNode*, TreeNode*>& parentsMap){
+    TreeNode* markParents(TreeNode* root, int start, unordered_map<TreeNode*, TreeNode*>& parentsMap){
+        TreeNode* target;
         queue<TreeNode*> q; // for BFS traversal to store parents in the map
         q.push(root);
         while(!q.empty()){
             for(int i=0; i<q.size(); i++){
                 TreeNode* node=q.front();
                 q.pop();
-                if(node==target) continue; // target se niche wali nodes k parents ki need he nhi h
+                if(node->val==start){
+                    target=node;
+                    continue; // target se niche wali nodes k parents ki need he nhi h
+                } 
                 if(node->left){
                     q.push(node->left);
                     parentsMap[node->left]=node;
@@ -19,17 +23,12 @@ public:
                 }
             }
         }
+        return target;
     }
-    TreeNode* findStart(TreeNode* root, int start){ // to find node of start point
-        if(!root || root->val==start) return root;
-        TreeNode* left=findStart(root->left, start);
-        TreeNode* right=findStart(root->right, start);
-        return (left==NULL) ? right:left;
-    }
+
     int amountOfTime(TreeNode* root, int start) {
-        TreeNode* target=findStart(root, start);
         unordered_map<TreeNode*, TreeNode*> parentsMap;
-        markParents(root, target, parentsMap);
+        TreeNode* target=markParents(root, start, parentsMap);
 
         map<TreeNode*, bool> visited; // for storing record of each visited node
         queue<TreeNode*> que; // for BFS traversal and int for storing the distance
@@ -37,7 +36,7 @@ public:
         int time=0;
         while(!que.empty()){// will continue till it has reached a distance of k 
             int size=que.size();
-            time++;
+            time++; // time increase in every new iteration of BFS
             while(size--){
                 TreeNode* node=que.front();
                 que.pop();
@@ -54,7 +53,7 @@ public:
                 }
             }
         }
-        return time-1;
+        return time-1; // deducing the time added for the start node
     }
 };
 // same as the (863. All Nodes Distance K in Binary Tree)
