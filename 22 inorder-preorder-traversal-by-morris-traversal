@@ -1,0 +1,59 @@
+question:- 
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> inorder;
+        if(root==NULL) return inorder;
+        TreeNode* cur=root;
+        while(cur){
+            if(cur->left==NULL){
+                inorder.push_back(cur->val);
+                cur=cur->right;
+            }else{
+                TreeNode* iterator=cur->left;
+                while(iterator->right && iterator->right!=cur){
+                    iterator=iterator->right;
+                }
+                if(iterator->right==nullptr){
+                    iterator->right=cur;
+                    cur=cur->left;
+                }else{
+                    iterator->right=NULL;
+                    inorder.push_back(cur->val);
+                    cur=cur->right;
+                }
+            }
+        }
+        return inorder;
+    }
+};
+// striver's trees playlist
+
+// preorder:-
+class Solution {
+public:
+// MORRIS TRAVERSAL :- tc-O(n) sc-O(n)
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> preorder;
+        if(root==NULL) return preorder;
+        TreeNode* cur=root;
+        while(cur){
+            if(cur->left==NULL){
+                preorder.push_back(cur->val);
+                cur=cur->right;
+            }else{
+                TreeNode* iterator=cur->left;
+                while(iterator->right && iterator->right!=cur){
+                    iterator=iterator->right;
+                }
+                if(iterator->right==nullptr){
+                    iterator->right=cur;
+                    preorder.push_back(cur->val);
+                    cur=cur->left;
+                }else{
+                    iterator->right=NULL;
+                    cur=cur->right;
+                }
+            }
+        }
+        return preorder;
+    }
+};
