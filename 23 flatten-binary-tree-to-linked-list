@@ -1,0 +1,47 @@
+Question:-https://leetcode.com/problems/flatten-binary-tree-to-linked-list/
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        TreeNode* cur=root;
+        while(cur){
+            if(cur->left!=NULL){
+                TreeNode* leftTree=cur->left;
+                TreeNode* pre=leftTree;
+                while(pre->right)
+                    pre=pre->right;
+                
+                pre->right=cur->right;
+                cur->left=NULL;
+                cur->right=leftTree;
+            }
+            cur=cur->right;
+        }
+    }
+};
+// striver's trees playlist
+
+
+//     void preTraversal(TreeNode* root, vector<int>& pre){
+//         if(root==NULL) return;
+//         pre.push_back(root->val);
+//         preTraversal(root->left, pre);
+//         preTraversal(root->right, pre);
+//     }
+//     void flatten(TreeNode* root) {
+//         if(root==NULL) return;
+//         TreeNode* temp=root;
+//         vector<int> preOrder;
+//         preTraversal(root, preOrder);
+//         for(int i=0; i<preOrder.size(); i++){
+//             temp->val=preOrder[i];
+//             temp->left=NULL;
+//             if(temp->right==NULL && i<preOrder.size()-1){
+//                 TreeNode* newNode=new TreeNode();
+//                 temp->right=newNode;
+//             }
+//             temp=temp->right;
+//         }
+//     }
+// };
+// top 150 interview ques
+// solved myself but by using O(n) extra space
