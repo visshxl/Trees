@@ -1,0 +1,14 @@
+question:-https://leetcode.com/problems/path-sum/
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if (!root)
+            return false;
+        // If it's a leaf node and the remaining targetSum is the value of this leaf
+        if (!root->left && !root->right && targetSum == root->val)
+            return true;
+        // Update targetSum for the left and right subtree
+        return hasPathSum(root->left, targetSum - root->val) || hasPathSum(root->right, targetSum - root->val);
+    }
+};
+// top 150 dsa ques
