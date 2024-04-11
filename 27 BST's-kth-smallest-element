@@ -1,0 +1,22 @@
+question:-https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+class Solution {
+public:
+    void inOrderSol(TreeNode* root, int k, int& ans, int& cnt){
+        if(!root) return;
+        
+        inOrderSol(root->left, k, ans, cnt);
+        cnt++;
+        if(cnt==k){
+            ans=root->val;
+            return;
+        }
+        inOrderSol(root->right, k, ans, cnt);
+    }
+
+    int kthSmallest(TreeNode* root, int k) {
+        int ans, cnt=0;
+        inOrderSol(root, k, ans, cnt);
+        return ans;
+    }
+};
+// striver's trees playlist
