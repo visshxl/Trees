@@ -1,0 +1,18 @@
+question:-https://leetcode.com/problems/validate-binary-search-tree/
+class Solution {
+public:
+    bool dfs(TreeNode* root, long long upperLim, long long lowerLim){
+        if(!root) return true;
+
+        if(root->val >= upperLim || root->val <=lowerLim) return false;
+        return dfs(root->left, root->val, lowerLim) && dfs(root->right, upperLim, root->val);
+    }
+
+    bool isValidBST(TreeNode* root) {
+        if(!root->left && !root->right) return true;
+        return dfs(root, 10000000000, -10000000000);
+    }
+};
+// striver's trees playlist (using property of BST's)
+// mine approach was doing inorder traversal and save it in a vector and see if it is strictly 
+// increasing or not, if not return false else return true
