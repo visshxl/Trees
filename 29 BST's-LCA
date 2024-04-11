@@ -1,0 +1,19 @@
+question:-https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        int mini=min(p->val, q->val);
+        int maxi=max(p->val, q->val);
+        while(true){
+            if(root->val > mini && root->val > maxi){
+                root=root->left;
+            }else if(root->val < mini && root->val < maxi){
+                root=root->right;
+            }else{
+                break;
+            }
+        }
+        return root;
+    }
+};
+// striver's trees playlist (self) tc-O(height) sc-O(1)
