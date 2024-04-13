@@ -1,0 +1,22 @@
+Question:-https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/
+class Solution {
+public:
+    TreeNode* createTree(vector<int>& preorder, int upperLim, int& ind){
+        if(ind==preorder.size() || preorder[ind]>upperLim) return NULL;
+
+        TreeNode* newNode= new TreeNode(preorder[ind++]);//generating new node after checking condition
+        newNode->left=createTree(preorder, newNode->val, ind); //passing val of node as upperLim
+        newNode->right=createTree(preorder, upperLim, ind);//pasing prev upperLim as upperLim for right
+        return newNode; // return that node as the left or right subtree to the respective call
+    }
+
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        int ind=0;// have to pass ind by reference otherwise it will create issue
+        return createTree(preorder, INT_MAX, ind);
+    }
+};
+// stirver's tree playlist tc-O(3n) sc-(1) other than O(n) for stack and O(n) for tree creation
+
+// another approach was that to sort the preorder and then we will get the inorder of the bst
+// and then solve it like creating a binary tree from preorder and inorder but it was taking 
+// O(logn) more time for the sorting
