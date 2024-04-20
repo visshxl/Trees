@@ -1,0 +1,40 @@
+question:-https://leetcode.com/problems/recover-binary-search-tree/
+class Solution {
+private:    
+    TreeNode* first; 
+    TreeNode* prev;
+    TreeNode* second;
+    TreeNode* middle;
+
+private:
+    void dfs(TreeNode* root){
+        if(!root) return;
+
+        dfs(root->left);
+        if(prev!=NULL && (prev->val > root->val)){
+            // this the first voilation
+            if(first==NULL){
+                first=prev; 
+                middle=root; // nodes to be swapped are adjacent (in case of no second voilation)
+            }
+            // this is the second voilation
+            else{
+                second=root; // nodes to be swapped are not adjacent 
+            }
+        }
+        prev=root;
+        dfs(root->right);
+    }
+public:
+    void recoverTree(TreeNode* root) {
+        first=middle=second=NULL;
+        prev=new TreeNode(INT_MIN);        
+        dfs(root);
+        if(first && second){
+            swap(first->val, second->val);
+        }else{
+            swap(first->val, middle->val);
+        }
+    }
+};
+// striver's trees playlist
