@@ -1,0 +1,53 @@
+https://leetcode.com/problems/delete-nodes-and-return-forest/description/?envType=daily-question&envId=2024-07-17
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    // approach is bottom to up
+    TreeNode* recursiveCall(TreeNode* root, unordered_set<int>& set, vector<TreeNode*>& ans){
+        if(root==NULL) return NULL;
+
+        // returning null if the node has to be deleted otherwise the returning the passed node only
+        root->left=recursiveCall(root->left, set, ans);
+        root->right=recursiveCall(root->right, set, ans);
+
+        if(set.find(root->val)!=set.end()){
+            // pushing the head nodes of remaining sub trees
+            if(root->left!=NULL){
+                ans.push_back(root->left);
+            }
+            if(root->right!=NULL){
+                ans.push_back(root->right);
+            }
+            // returning null in case the node had to be deleted
+            return NULL;
+        }else{
+            // returning the node if it does not need to be deleted
+            return root;
+        }
+    }
+
+    vector<TreeNode*> delNodes(TreeNode* root, vector<int>& to_delete) {
+        unordered_set<int> set;
+        for(int it:to_delete){
+            set.insert(it);
+        }
+        vector<TreeNode*> ans;
+        recursiveCall(root, set, ans);
+        if(set.find(root->val)==set.end()){
+            ans.push_back(root);
+        }
+        return ans;
+    }
+};
+
+// daily question
